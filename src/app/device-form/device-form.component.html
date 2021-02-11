@@ -1,0 +1,39 @@
+
+<div data-toggle="modal" data-target="#deviceFormModal">Show</div>
+
+<div class="modal fade" id="deviceFormModal" data-backdrop="static">
+
+    <form [formGroup]="deviceForm" (ngSubmit)="onSubmit()">
+
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4>{{actionName}} Device</h4>
+                </div>
+        
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="dev-serial-num" class="col-form-label">Serial Number*</label>
+                        <input id="dev-serial-num" class="form-control" type="text" placeholder="1-255 characters" formControlName="serialNumber">
+                    </div>
+                    <div class="form-group">
+                        <label for="dev-description" class="col-form-label">Description*</label>
+                        <input id="dev-description" class="form-control" type="text" placeholder="1-255 characters" formControlName="description">
+                    </div>
+                    <div class="form-group">
+                        <label for="dev-type" class="col-form-label">Type*</label>
+                        <input id="dev-type" class="form-control" type="text" formControlName="type">
+                    </div>
+                    <p class="text-secondary">The fields with * are required</p>
+                </div>
+        
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit" [disabled]="!deviceForm.valid">Submit</button>
+                    <button class="btn btn-danger ml-2" data-dismiss="modal" (click)="onCancel($event)">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>

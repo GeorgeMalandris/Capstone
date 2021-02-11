@@ -1,0 +1,38 @@
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#employeeFormModal">
+    {{actionName}} Employee
+  </button>
+
+<div class="modal fade" id="employeeFormModal" data-backdrop="static">
+
+    <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4>{{actionName}} Employee</h4>
+                </div>
+        
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="emp-name" class="col-form-label">Employee Name*</label>
+                        <input id="emp-name" class="form-control" type="text" placeholder="3-255 characters" formControlName="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="emp-email" class="col-form-label">Employee Email*</label>
+                        <input id="emp-email" class="form-control" type="text" formControlName="email">
+                    </div>
+                    <p class="text-secondary">The fields with * are required</p>
+                </div>
+        
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit" [disabled]="!employeeForm.valid">Submit</button>
+                    <button class="btn btn-danger ml-2" data-dismiss="modal" (click)="onCancel($event)">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
