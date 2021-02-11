@@ -1,0 +1,8 @@
+<div class="container">
+    <button class="btn btn-primary" (click)="createDevice()">Add New Device</button>
+
+    <app-device-form #deviceForm (sendDeviceData)="getDeviceData($event)"></app-device-form>
+
+    <app-device-list [deviceList]="devices" (editDevice)="editDevice($event)" 
+    (deleteDevice)="deleteDevice($event)" (showDeviceDetails)="showDeviceDetails($event)"></app-device-list>
+</div>

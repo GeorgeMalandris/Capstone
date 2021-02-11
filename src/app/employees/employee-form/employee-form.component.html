@@ -1,11 +1,8 @@
-
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#employeeFormModal">
-    {{actionName}} Employee
-  </button>
+<div #formToggle hidden data-toggle="modal" data-target="#employeeFormModal"></div>
 
 <div class="modal fade" id="employeeFormModal" data-backdrop="static">
 
-    <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="employeeForm" novalidate>
 
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
@@ -27,7 +24,7 @@
                 </div>
         
                 <div class="modal-footer">
-                    <button class="btn btn-primary" type="submit" [disabled]="!employeeForm.valid">Submit</button>
+                    <button class="btn btn-primary" data-dismiss="modal" (click)="sendData($event)" [disabled]="!employeeForm.valid">Submit</button>
                     <button class="btn btn-danger ml-2" data-dismiss="modal" (click)="onCancel($event)">Close</button>
                 </div>
 

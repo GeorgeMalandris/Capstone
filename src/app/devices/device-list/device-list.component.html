@@ -1,0 +1,22 @@
+<table class="table">
+    <thead class="bg-dark text-white">
+        <tr>
+            <th class="text-center">Serial Number</th>
+            <th class="text-center">Description</th>
+            <th class="text-center">Type</th>
+            <th class="text-center">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let device of deviceList">
+            <td class="text-center">{{device.serialNumber}}</td>
+            <td class="text-center">{{device.description}}</td>
+            <td class="text-center">{{device.type}}</td>
+            <td class="text-center">
+                <button class="btn btn-success" (click)="sendDeviceToEdit(device)">Edit</button>
+                <button class="btn btn-danger ml-2" (click)="sendDeviceToDelete(device)">Delete</button>
+                <button class="btn btn-primary ml-2" (click)="sendDeviceToShow(device)">Details</button>
+            </td>
+        </tr>
+    </tbody>
+</table>

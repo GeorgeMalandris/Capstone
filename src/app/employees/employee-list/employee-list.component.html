@@ -1,0 +1,22 @@
+<table class="table">
+    <thead class="bg-dark text-white">
+        <tr>
+            <th class="text-center">Id</th>
+            <th class="text-center">Name</th>
+            <th class="text-center">Email</th>
+            <th class="text-center">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let employee of employeeList">
+            <td class="text-center">{{employee.id}}</td>
+            <td class="text-center">{{employee.name}}</td>
+            <td class="text-center">{{employee.email}}</td>
+            <td class="text-center"> 
+                <button class="btn btn-success" (click)="sendEmployeeToEdit(employee)">Edit</button>
+                <button class="btn btn-danger ml-2" (click)="sendEmployeeToDelete(employee)">Delete</button>
+                <button class="btn btn-primary ml-2" (click)="sendEmployeeToShow(employee)">Details</button>
+            </td>
+        </tr>
+    </tbody>
+</table>

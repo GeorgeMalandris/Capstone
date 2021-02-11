@@ -1,9 +1,9 @@
 
-<div data-toggle="modal" data-target="#deviceFormModal">Show</div>
+<div #formToggle data-toggle="modal" data-target="#deviceFormModal"></div>
 
 <div class="modal fade" id="deviceFormModal" data-backdrop="static">
 
-    <form [formGroup]="deviceForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="deviceForm" novalidate>
 
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
@@ -29,7 +29,7 @@
                 </div>
         
                 <div class="modal-footer">
-                    <button class="btn btn-primary" type="submit" [disabled]="!deviceForm.valid">Submit</button>
+                    <button class="btn btn-primary" data-dismiss="modal" (click)="sendData($event)" [disabled]="!deviceForm.valid">Submit</button>
                     <button class="btn btn-danger ml-2" data-dismiss="modal" (click)="onCancel($event)">Close</button>
                 </div>
 
