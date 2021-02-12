@@ -20,12 +20,12 @@ export class EmployeesComponent implements OnInit {
     this.employees = this.management.employees;
   }
 
-  deleteEmployee(employee:Employee):void{
-    console.log("delete"+employee.id);
+  deleteEmployee(employeeId:number):void{
+    this.management.deleteEmployee(employeeId);
   }
 
-  showEmployeeDetails(employee:Employee):void{
-    console.log("show details"+employee.id);
+  showEmployeeDetails(employeeId:number):void{
+    this.management.getEmployee(employeeId);
   }
 
   editEmployee(employee:Employee):void{
@@ -36,8 +36,14 @@ export class EmployeesComponent implements OnInit {
     this.employeeForm?.openForm(null);
   }
 
-  getEmployeeData(employee:Employee){
-    console.log(employee.id + employee.name + employee.email);
+  saveEmployeeData(employee:Employee){
+    if(!employee.id){
+      employee.id = this.management.nextId;
+      this.management.addEmployee(employee);
+    }
+    else{
+      this.management.editEmployee(employee);
+    }
   }
 
 }

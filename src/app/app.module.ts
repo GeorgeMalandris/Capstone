@@ -10,6 +10,7 @@ import { EmployeeListComponent } from './employees/employee-list/employee-list.c
 import { DeviceListComponent } from './devices/device-list/device-list.component';
 import { EmployeesComponent } from './employees/employees.component';
 import { DevicesComponent } from './devices/devices.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { DevicesComponent } from './devices/devices.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

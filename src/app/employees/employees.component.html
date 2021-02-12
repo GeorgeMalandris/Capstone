@@ -1,8 +1,9 @@
-<div class="container">
-    <button class="btn btn-primary" (click)="createEmployee()">Add New Employee</button>
+<div class="mt-5">
+    <button class="btn btn-primary mb-1" (click)="createEmployee()">Add New Employee</button>
     
-    <app-employee-form #employeeForm (sendEmployeeData)="getEmployeeData($event)"></app-employee-form>
+    <app-employee-form #employeeForm (sendEmployeeData)="saveEmployeeData($event)"></app-employee-form>
 
     <app-employee-list [employeeList]="employees" (editEmployee)="editEmployee($event)" 
     (deleteEmployee)="deleteEmployee($event)" (showEmployeeDetails)="showEmployeeDetails($event)"></app-employee-list>
 </div>
+

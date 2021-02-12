@@ -24,12 +24,12 @@ export class EmployeeListComponent implements OnInit {
     this.editEmployee.emit(employee);
   }
 
-  sendEmployeeToShow(employee:Employee):void{
-    this.showEmployeeDetails.emit(employee);
+  sendEmployeeToShow(employeeId:number):void{
+    this.showEmployeeDetails.emit(employeeId);
   }
 
-  sendEmployeeToDelete(employee:Employee):void{
-    this.deleteEmployee.emit(employee);
+  sendEmployeeToDelete(employeeId:number):void{
+    this.deleteEmployee.emit(employeeId);
   }
 
 }
