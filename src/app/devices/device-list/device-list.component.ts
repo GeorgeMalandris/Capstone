@@ -24,12 +24,12 @@ export class DeviceListComponent implements OnInit {
     this.editDevice.emit(device);
   }
 
-  sendDeviceToShow(device:Device):void{
-    this.showDeviceDetails.emit(device);
+  sendDeviceToShow(serialNumber:string):void{
+    this.showDeviceDetails.emit(serialNumber);
   }
 
-  sendDeviceToDelete(device:Device):void{
-    this.deleteDevice.emit(device);
+  sendDeviceToDelete(serialNumber:string):void{
+    this.deleteDevice.emit(serialNumber);
   }
 
 }

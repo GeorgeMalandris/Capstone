@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Device } from 'src/Models/device';
-import { DeviceManagementService } from 'src/Services/device-management.service';
+import { DeviceManagementService } from 'src/Services/firebase/device-management-firebase/device-management.service';
 import { DeviceFormComponent } from './device-form/device-form.component';
 
 @Component({
@@ -12,20 +12,22 @@ import { DeviceFormComponent } from './device-form/device-form.component';
 export class DevicesComponent implements OnInit {
 
   devices!:Device[]; 
+  unavailableSerialNumbers!:string[];
   @ViewChild("deviceForm") deviceForm:DeviceFormComponent | null = null;
   
   constructor(private management:DeviceManagementService) { }
 
   ngOnInit(): void {
     this.devices = this.management.devices;
+    this.unavailableSerialNumbers = this.management.unavailableSerialNumbers;
   }
 
-  deleteDevice(device:Device):void{
-    console.log("delete"+device.serialNumber);
+  deleteDevice(serialNumber:string):void{
+    this.management.deleteDevice(serialNumber);
   }
 
-  showDeviceDetails(device:Device):void{
-    console.log("show details"+device.serialNumber);
+  showDeviceDetails(serialNumber:string):void{
+    this.management.getDevice(serialNumber);
   }
 
   editDevice(device:Device):void{
@@ -37,7 +39,13 @@ export class DevicesComponent implements OnInit {
   }
 
   getDeviceData(device:Device){
-    console.log(device.serialNumber + device.description + device.type);
+    let deviceExists:number = this.unavailableSerialNumbers.indexOf(device.serialNumber);
+    if(deviceExists === -1){
+      this.management.addDevice(device);
+    }
+    else{
+      this.management.editDevice(device);
+    }
   }
 
 }

@@ -1,7 +1,7 @@
 <div class="mt-5">
     <button class="btn btn-primary mb-1" (click)="createDevice()">Add New Device</button>
 
-    <app-device-form #deviceForm (sendDeviceData)="getDeviceData($event)"></app-device-form>
+    <app-device-form #deviceForm [unavailableSerialNumbers]="unavailableSerialNumbers" (sendDeviceData)="getDeviceData($event)"></app-device-form>
 
     <app-device-list [deviceList]="devices" (editDevice)="editDevice($event)" 
     (deleteDevice)="deleteDevice($event)" (showDeviceDetails)="showDeviceDetails($event)"></app-device-list>

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FirebaseEmployee } from 'src/app/employees/firebase-model/firebase-employee';
+import { FirebaseEmployee } from 'src/Services/firebase/firebase-models/firebase-employee';
 import { Employee } from 'src/Models/employee';
 
 @Injectable({
@@ -8,12 +8,14 @@ import { Employee } from 'src/Models/employee';
 })
 export class EmployeeManagementService {
 
-  employees!:FirebaseEmployee[];
-  selectedEmployee!:FirebaseEmployee;
-  nextId!:number;
+  employees:FirebaseEmployee[];
+  selectedEmployee:FirebaseEmployee | null;
+  nextId:number;
 
   constructor(private http:HttpClient) { 
     this.employees = [];
+    this.selectedEmployee = null;
+    this.nextId = 0;
     this.getEmployees();
     this.getNextEmpId();
   }
@@ -30,7 +32,7 @@ export class EmployeeManagementService {
   }
 
   getEmployee(employeeId:number):void{
-    let firebaseKey:string = this.getFirebaseId(employeeId);
+    let firebaseKey:string = this.getFirebaseKey(employeeId);
     this.http.get("https://capstonedb-a452b-default-rtdb.firebaseio.com/Employees/" + firebaseKey + ".json").subscribe(
       (employee:any)=>{
         this.selectedEmployee = new FirebaseEmployee(firebaseKey,employee.id,employee.name,employee.email);
@@ -49,12 +51,12 @@ export class EmployeeManagementService {
   }
 
   editEmployee(employeeToEdit:Employee):void{
-    let firebaseKey:string = this.getFirebaseId(employeeToEdit.id);
+    let firebaseKey:string = this.getFirebaseKey(employeeToEdit.id);
     this.http.put("https://capstonedb-a452b-default-rtdb.firebaseio.com/Employees/" + firebaseKey + ".json", employeeToEdit).subscribe(
       (employee:any)=>{
         this.employees.splice(this.employees.findIndex(
           (employee:FirebaseEmployee)=>{
-            return employee.firebaseId === firebaseKey;
+            return employee.firebaseKey === firebaseKey;
           }),1);
 
         this.employees.push(new FirebaseEmployee(firebaseKey,employee.id,employee.name,employee.email));
@@ -63,18 +65,18 @@ export class EmployeeManagementService {
   }
 
   deleteEmployee(employeeId:number):void{
-    let firebaseKey:string = this.getFirebaseId(employeeId);
+    let firebaseKey:string = this.getFirebaseKey(employeeId);
     this.http.delete("https://capstonedb-a452b-default-rtdb.firebaseio.com/Employees/" + firebaseKey + ".json").subscribe(
       ()=>{
         this.employees.splice(this.employees.findIndex(
           (employee:FirebaseEmployee)=>{
-            return employee.firebaseId === firebaseKey
+            return employee.firebaseKey === firebaseKey
           }),1);
       }
     );
   }
 
-  getNextEmpId():void{
+  private getNextEmpId():void{
     this.http.get("https://capstonedb-a452b-default-rtdb.firebaseio.com/NextEmployeeId.json").subscribe(
       (nextId:any)=>{
         this.nextId = nextId.id;
@@ -90,12 +92,12 @@ export class EmployeeManagementService {
     );
   }
 
-  private getFirebaseId(employeeId:number):string {
-    let firebaseId:string = this.employees.filter(
+  private getFirebaseKey(employeeId:number):string {
+    let firebaseKey:string = this.employees.filter(
       (employee:FirebaseEmployee)=>{
         return employee.id === employeeId
-      })[0].firebaseId;
-    return firebaseId;
+      })[0].firebaseKey;
+    return firebaseKey;
   }
 
 }

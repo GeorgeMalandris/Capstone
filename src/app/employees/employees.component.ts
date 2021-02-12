@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Employee } from 'src/Models/employee';
-import { EmployeeManagementService } from 'src/Services/employee-management.service';
+import { EmployeeManagementService } from 'src/Services/firebase/employee-management-firebase/employee-management.service';
 import { EmployeeFormComponent } from './employee-form/employee-form.component';
 
 @Component({
