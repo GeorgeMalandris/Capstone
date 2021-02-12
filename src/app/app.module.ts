@@ -11,6 +11,7 @@ import { DeviceListComponent } from './devices/device-list/device-list.component
 import { EmployeesComponent } from './employees/employees.component';
 import { DevicesComponent } from './devices/devices.component';
 import { HttpClientModule } from '@angular/common/http';
+import { EmployeeDetailsComponent } from './employees/employee-details/employee-details.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { HttpClientModule } from '@angular/common/http';
     EmployeeListComponent,
     DeviceListComponent,
     EmployeesComponent,
-    DevicesComponent
+    DevicesComponent,
+    EmployeeDetailsComponent
   ],
   imports: [
     BrowserModule,

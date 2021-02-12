@@ -67,14 +67,13 @@ export class EmployeeDeviceManagementService {
 
   getEmployeeDevices(employeeId:number):FirebaseDevice[]{
     let employeeDevices:FirebaseDevice[] = [];
-
     for(let device of this.deviceInventory){
       let index:number = this.employeeDeviceConnections.findIndex(
         (connection:FirebaseEmployeeDeviceConnection)=>{
-          return connection.employeeId === employeeId;
+          return connection.employeeId === employeeId && device.serialNumber === connection.deviceSerialNumber;
         }
       );
-      if(index === -1){
+      if(index !== -1){
         employeeDevices.push(device);
       }
     }

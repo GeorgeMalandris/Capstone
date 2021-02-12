@@ -1,0 +1,59 @@
+<div #detailsToggle hidden data-toggle="modal" data-target="#employeeDetailsModal"></div>
+
+<div class="modal fade" id="employeeDetailsModal" data-backdrop="static">
+
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4>Employee Details</h4>
+                </div>
+        
+                <div class="modal-body">
+
+                    <div *ngIf="selectedEmployee">
+                        <div class="mb-3 mt-3">
+                            <dl class="row">
+                                <dt class="col-4">Employee Id:</dt>
+                                <dl class="col-8">{{selectedEmployee.id}}</dl>
+                                <dt class="col-4">Employee Name:</dt>
+                                <dl class="col-8">{{selectedEmployee.name}}</dl>
+                                <dt class="col-4">Employee Email:</dt>
+                                <dl class="col-8">{{selectedEmployee.email}}</dl>
+                            </dl>
+                        </div>
+    
+                        <div *ngIf="employeeDevices.length>0">
+                            <div class="row mb-1">
+                                <h5 class="col-12">Employee Devices:</h5>
+                            </div>
+                            <table class="table lightweight-table" >
+                                <thead>
+                                    <tr>
+                                        <th>Serial Number</th>
+                                        <th>Description</th>
+                                        <th>Type</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let employeeDevice of employeeDevices">
+                                        <td>{{employeeDevice.serialNumber}}</td>
+                                        <td>{{employeeDevice.description}}</td>
+                                        <td>{{employeeDevice.type}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                    </div>
+                   
+                </div>
+        
+                <div class="modal-footer">
+                    <button class="btn btn-danger ml-2" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+
+</div>

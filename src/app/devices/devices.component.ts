@@ -15,19 +15,19 @@ export class DevicesComponent implements OnInit {
   unavailableSerialNumbers!:string[];
   @ViewChild("deviceForm") deviceForm:DeviceFormComponent | null = null;
   
-  constructor(private management:DeviceManagementService) { }
+  constructor(private deviceManagement:DeviceManagementService) { }
 
   ngOnInit(): void {
-    this.devices = this.management.devices;
-    this.unavailableSerialNumbers = this.management.unavailableSerialNumbers;
+    this.devices = this.deviceManagement.devices;
+    this.unavailableSerialNumbers = this.deviceManagement.unavailableSerialNumbers;
   }
 
   deleteDevice(serialNumber:string):void{
-    this.management.deleteDevice(serialNumber);
+    this.deviceManagement.deleteDevice(serialNumber);
   }
 
   showDeviceDetails(serialNumber:string):void{
-    this.management.getDevice(serialNumber);
+    this.deviceManagement.getDevice(serialNumber);
   }
 
   editDevice(device:Device):void{
@@ -39,12 +39,12 @@ export class DevicesComponent implements OnInit {
   }
 
   getDeviceData(device:Device){
-    let deviceExists:number = this.unavailableSerialNumbers.indexOf(device.serialNumber);
-    if(deviceExists === -1){
-      this.management.addDevice(device);
+    let deviceIndex:number = this.unavailableSerialNumbers.indexOf(device.serialNumber);
+    if(deviceIndex === -1){
+      this.deviceManagement.addDevice(device);
     }
     else{
-      this.management.editDevice(device);
+      this.deviceManagement.editDevice(device);
     }
   }
 
