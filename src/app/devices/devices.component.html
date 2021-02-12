@@ -5,5 +5,7 @@
 
     <app-device-list [deviceList]="devices" (editDevice)="editDevice($event)" 
     (deleteDevice)="deleteDevice($event)" (showDeviceDetails)="showDeviceDetails($event)"></app-device-list>
+
+    <app-device-details #deviceDetails [selectedDevice]="deviceToShow"></app-device-details>
 </div>
 

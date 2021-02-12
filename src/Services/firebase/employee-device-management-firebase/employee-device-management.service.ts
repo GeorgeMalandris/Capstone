@@ -1,8 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Employee } from 'src/Models/employee';
 import { EmployeeDeviceConnection } from 'src/Models/employee-device-connection';
 import { DeviceManagementService } from '../device-management-firebase/device-management.service';
+import { EmployeeManagementService } from '../employee-management-firebase/employee-management.service';
 import { FirebaseDevice } from '../firebase-models/firebase-device';
+import { FirebaseEmployee } from '../firebase-models/firebase-employee';
 import { FirebaseEmployeeDeviceConnection } from '../firebase-models/firebase-employee-device-connection';
 
 @Injectable({
@@ -12,10 +15,12 @@ export class EmployeeDeviceManagementService {
 
   employeeDeviceConnections:FirebaseEmployeeDeviceConnection[];
   private deviceInventory:FirebaseDevice[];
+  private employees:FirebaseEmployee[];
 
-  constructor(private http:HttpClient, private deviceManagement:DeviceManagementService) { 
+  constructor(private http:HttpClient, private deviceManagement:DeviceManagementService, private employeeManagement:EmployeeManagementService) { 
     this.employeeDeviceConnections = [];
     this.deviceInventory = this.deviceManagement.devices;
+    this.employees = this.employeeManagement.employees;
     this.getEmployeeDeviceConnections();
   }
   
@@ -78,6 +83,23 @@ export class EmployeeDeviceManagementService {
       }
     }
     return employeeDevices;
+  }
+
+  getEmployee(deviceSerialNumber:string):Employee | null{
+    let employeeIdIndex:number = -1;
+    employeeIdIndex = this.employeeDeviceConnections.findIndex(
+      (connection:FirebaseEmployeeDeviceConnection)=>{
+        return connection.deviceSerialNumber === deviceSerialNumber;
+      }
+    );
+    let employee:Employee | null = null;
+    if(employeeIdIndex !== -1){
+      employee = this.employees.filter(
+        (employee:Employee)=>{
+          return employee.id === this.employeeDeviceConnections[employeeIdIndex].employeeId;
+        })[0];
+    }
+    return employee;
   }
 
 }

@@ -12,6 +12,7 @@ import { EmployeesComponent } from './employees/employees.component';
 import { DevicesComponent } from './devices/devices.component';
 import { HttpClientModule } from '@angular/common/http';
 import { EmployeeDetailsComponent } from './employees/employee-details/employee-details.component';
+import { DeviceDetailsComponent } from './devices/device-details/device-details.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { EmployeeDetailsComponent } from './employees/employee-details/employee-
     DeviceListComponent,
     EmployeesComponent,
     DevicesComponent,
-    EmployeeDetailsComponent
+    EmployeeDetailsComponent,
+    DeviceDetailsComponent
   ],
   imports: [
     BrowserModule,

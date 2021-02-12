@@ -34,8 +34,8 @@ export class EmployeeManagementService {
     let firebaseKey:string = this.getFirebaseKey(employeeId);
     this.http.get("https://capstonedb-a452b-default-rtdb.firebaseio.com/Employees/" + firebaseKey + ".json").subscribe(
       (employee:any)=>{
-        let newEmployee = new FirebaseEmployee(firebaseKey,employee.id,employee.name,employee.email);
-        this.selectedEmployee.emit(newEmployee);
+        let newEmployeeSelection = new FirebaseEmployee(firebaseKey,employee.id,employee.name,employee.email);
+        this.selectedEmployee.emit(newEmployeeSelection);
         }
     );
   }

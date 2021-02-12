@@ -1,0 +1,63 @@
+<div #detailsToggle hidden data-toggle="modal" data-target="#deviceDetailsModal"></div>
+
+<div class="modal fade" id="deviceDetailsModal" data-backdrop="static">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4>Device Details</h4>
+            </div>
+    
+            <div class="modal-body">
+
+                <div *ngIf="selectedDevice">
+                    <div class="mb-3 mt-3">
+                        <dl class="row">
+                            <dt class="col-4">Device Serial Number:</dt>
+                            <dl class="col-8">{{selectedDevice.serialNumber}}</dl>
+                            <dt class="col-4">Device Description:</dt>
+                            <dl class="col-8">{{selectedDevice.description}}</dl>
+                            <dt class="col-4">Device Type:</dt>
+                            <dl class="col-8">{{selectedDevice.type}}</dl>
+                            <dt class="col-4">Device Status:</dt>
+                            <dl class="col-8" *ngIf="!employee; then free else assigned"></dl>
+                            <ng-template #free>Free</ng-template>
+                            <ng-template #assigned>Assigned to employee</ng-template>
+                        </dl>
+                    </div>
+
+                    <div *ngIf="employee">
+                        <div class="row mb-1">
+                            <h5 class="col-12">Assigned To:</h5>
+                        </div>
+                        <table class="table lightweight-table" >
+                            <thead>
+                                <tr>
+                                    <th>Employee Id</th>
+                                    <th>Employee Name</th>
+                                    <th>Employee Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{employee.id}}</td>
+                                    <td>{{employee.name}}</td>
+                                    <td>{{employee.email}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                </div>
+               
+            </div>
+    
+            <div class="modal-footer">
+                <button class="btn btn-danger ml-2" data-dismiss="modal" (close)="closeDetails()">Close</button>
+            </div>
+
+        </div>
+    </div>
+
+</div>

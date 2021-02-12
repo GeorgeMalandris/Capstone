@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable, Output } from '@angular/core';
 import { FirebaseDevice } from 'src/Services/firebase/firebase-models/firebase-device';
 import { Device } from 'src/Models/device';
 
@@ -9,12 +9,11 @@ import { Device } from 'src/Models/device';
 export class DeviceManagementService {
 
   devices:FirebaseDevice[];
-  selectedDevice:FirebaseDevice | null;
+  @Output() selectedDevice = new EventEmitter();
   unavailableSerialNumbers:string[];
 
   constructor(private http:HttpClient) { 
     this.devices = [];
-    this.selectedDevice = null;
     this.unavailableSerialNumbers = [];
     this.getDevices();
   }
@@ -35,7 +34,8 @@ export class DeviceManagementService {
     let firebaseKey:string = this.getFirebaseKey(serialNumber);
     this.http.get("https://capstonedb-a452b-default-rtdb.firebaseio.com/Devices/" + firebaseKey + ".json").subscribe(
       (device:any)=>{
-        this.selectedDevice = new FirebaseDevice(firebaseKey,device.serialNumber,device.description,device.type);
+        let newDeviceSelection = new FirebaseDevice(firebaseKey,device.serialNumber,device.description,device.type);
+        this.selectedDevice.emit(newDeviceSelection);
         }
     );
   }

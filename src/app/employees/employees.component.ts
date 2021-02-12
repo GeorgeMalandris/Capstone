@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Device } from 'src/Models/device';
 import { Employee } from 'src/Models/employee';
-import { EmployeeDeviceConnection } from 'src/Models/employee-device-connection';
 import { EmployeeDeviceManagementService } from 'src/Services/firebase/employee-device-management-firebase/employee-device-management.service';
 import { EmployeeManagementService } from 'src/Services/firebase/employee-management-firebase/employee-management.service';
 import { EmployeeDetailsComponent } from './employee-details/employee-details.component';

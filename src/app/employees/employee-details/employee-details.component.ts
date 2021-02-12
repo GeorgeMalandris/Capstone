@@ -22,9 +22,14 @@ export class EmployeeDetailsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  showDetails(devices:Device[]){
+  showDetails(devices:Device[]):void{
     this.employeeDevices = devices;
     this.detailsToggle?.nativeElement.click();
+  }
+
+  closeDetails():void{
+    this.selectedEmployee = null;
+    this.employeeDevices = [];
   }
 
 }
