@@ -1,0 +1,94 @@
+<div #employeeDevicesManageToggle hidden data-toggle="modal" data-target="#employeeDevicesManageModal"></div>
+
+<div class="modal fade" id="employeeDevicesManageModal" data-backdrop="static">
+
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4>Manage Devices</h4>
+                </div>
+        
+                <div class="modal-body">
+
+                    <div *ngIf="employeeToManage">
+                        <div class="mb-3 mt-3">
+                            <dl class="row">
+                                <dt class="col-4">Employee Id:</dt>
+                                <dl class="col-8">{{employeeToManage.id}}</dl>
+                                <dt class="col-4">Employee Name:</dt>
+                                <dl class="col-8">{{employeeToManage.name}}</dl>
+                                <dt class="col-4">Employee Email:</dt>
+                                <dl class="col-8">{{employeeToManage.email}}</dl>
+                            </dl>
+                        </div>
+
+                        <div *ngIf="employeeDevices.length > 0; then showEmployeeDevices else noEmployeeDevices"></div>
+                        <div *ngIf="availableDevices.length > 0; then showAvailableDevices else noDevices"></div>
+    
+                        <ng-template #noEmployeeDevices><p>The employee does not have any devices.</p></ng-template>
+                        <ng-template #showEmployeeDevices>
+                            <div class="row mb-1">
+                                <h5 class="col-12">Employee Devices:</h5>
+                            </div>
+                            <table class="table lightweight-table" >
+                                <thead>
+                                    <tr>
+                                        <th>Serial Number</th>
+                                        <th>Description</th>
+                                        <th>Type</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let employeeDevice of employeeDevices">
+                                        <td>{{employeeDevice.serialNumber}}</td>
+                                        <td>{{employeeDevice.description}}</td>
+                                        <td>{{employeeDevice.type}}</td>
+                                        <td>
+                                            <button class="btn btn-danger ml-2" (click)="removeDeviceFromEmployee(employeeDevice.serialNumber)">Remove</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </ng-template>
+
+                        <ng-template #noDevices><p>There are not any available devices.</p></ng-template>
+                        <ng-template #showAvailableDevices>
+                            <div class="row mb-1">
+                                <h5 class="col-12">Available Devices:</h5>
+                            </div>
+                            <table class="table lightweight-table" >
+                                <thead>
+                                    <tr>
+                                        <th>Serial Number</th>
+                                        <th>Description</th>
+                                        <th>Type</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let availableDevice of availableDevices">
+                                        <td>{{availableDevice.serialNumber}}</td>
+                                        <td>{{availableDevice.description}}</td>
+                                        <td>{{availableDevice.type}}</td>
+                                        <td>
+                                            <button class="btn btn-success" (click)="addDeviceToEmployee(availableDevice.serialNumber)">Add</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </ng-template>
+                        
+                    </div>
+                   
+                </div>
+        
+                <div class="modal-footer">
+                    <button class="btn btn-primary ml-2" data-dismiss="modal" (close)="closeEmployeeDevicesManage()">Close</button>
+                </div>
+
+            </div>
+        </div>
+
+</div>

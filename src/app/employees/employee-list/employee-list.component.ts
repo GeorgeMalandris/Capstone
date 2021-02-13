@@ -12,6 +12,7 @@ export class EmployeeListComponent implements OnInit {
   @Output() editEmployee=new EventEmitter();
   @Output() showEmployeeDetails=new EventEmitter();
   @Output() deleteEmployee=new EventEmitter();
+  @Output() manageEmployeeDevices=new EventEmitter();
 
   constructor() { 
     this.employeeList = [];
@@ -30,6 +31,10 @@ export class EmployeeListComponent implements OnInit {
 
   sendEmployeeToDelete(employeeId:number):void{
     this.deleteEmployee.emit(employeeId);
+  }
+
+  sendEmployeeToManageDevices(employeeId:number):void{
+    this.manageEmployeeDevices.emit(employeeId);
   }
 
 }

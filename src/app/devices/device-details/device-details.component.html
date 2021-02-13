@@ -21,13 +21,13 @@
                             <dt class="col-4">Device Type:</dt>
                             <dl class="col-8">{{selectedDevice.type}}</dl>
                             <dt class="col-4">Device Status:</dt>
-                            <dl class="col-8" *ngIf="!employee; then free else assigned"></dl>
+                            <dl class="col-8" *ngIf="!selectedDeviceEmployee; then free else assigned"></dl>
                             <ng-template #free>Free</ng-template>
                             <ng-template #assigned>Assigned to employee</ng-template>
                         </dl>
                     </div>
 
-                    <div *ngIf="employee">
+                    <div *ngIf="selectedDeviceEmployee">
                         <div class="row mb-1">
                             <h5 class="col-12">Assigned To:</h5>
                         </div>
@@ -41,9 +41,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>{{employee.id}}</td>
-                                    <td>{{employee.name}}</td>
-                                    <td>{{employee.email}}</td>
+                                    <td>{{selectedDeviceEmployee.id}}</td>
+                                    <td>{{selectedDeviceEmployee.name}}</td>
+                                    <td>{{selectedDeviceEmployee.email}}</td>
                                 </tr>
                             </tbody>
                         </table>

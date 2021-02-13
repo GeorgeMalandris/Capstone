@@ -4,8 +4,11 @@
     <app-employee-form #employeeForm (sendEmployeeData)="saveEmployeeData($event)"></app-employee-form>
 
     <app-employee-list [employeeList]="employees" (editEmployee)="editEmployee($event)" 
-    (deleteEmployee)="deleteEmployee($event)" (showEmployeeDetails)="showEmployeeDetails($event)"></app-employee-list>
+    (deleteEmployee)="deleteEmployee($event)" (showEmployeeDetails)="showEmployeeDetails($event)"
+    (manageEmployeeDevices)="openManageEmployeeDevices($event)"></app-employee-list>
 
-    <app-employee-details #employeeDetails [selectedEmployee]="employeeToShow"></app-employee-details>
+    <app-employee-details #employeeDetails></app-employee-details>
+
+    <app-employee-device-manage #manageEmployeeDevices></app-employee-device-manage>
 </div>
 

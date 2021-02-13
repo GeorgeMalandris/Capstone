@@ -22,8 +22,11 @@
                                 <dl class="col-8">{{selectedEmployee.email}}</dl>
                             </dl>
                         </div>
+
+                        <div *ngIf="employeeDevices.length > 0; then showDevices else noDevices"></div>
     
-                        <div *ngIf="employeeDevices.length>0">
+                        <ng-template #noDevices>The employee does not have any devices.</ng-template>
+                        <ng-template #showDevices>
                             <div class="row mb-1">
                                 <h5 class="col-12">Employee Devices:</h5>
                             </div>
@@ -43,7 +46,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
+                        </ng-template>
                         
                     </div>
                    

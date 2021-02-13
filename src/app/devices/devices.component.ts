@@ -7,32 +7,27 @@ import { DeviceDetailsComponent } from './device-details/device-details.componen
 import { DeviceFormComponent } from './device-form/device-form.component';
 
 @Component({
-  providers: [DeviceManagementService],
   selector: 'app-devices',
   templateUrl: './devices.component.html',
   styleUrls: ['./devices.component.css']
 })
 export class DevicesComponent implements OnInit {
 
-  devices!:Device[]; 
-  unavailableSerialNumbers!:string[];
+  devices:Device[]; 
+  unavailableSerialNumbers:string[];
   @ViewChild("deviceForm") deviceForm:DeviceFormComponent | null;
   @ViewChild("deviceDetails") deviceDetails:DeviceDetailsComponent | null;
-  deviceToShow:Device;
   
-  constructor(private deviceManagement:DeviceManagementService, private connectionManagement:EmployeeDeviceManagementService) { 
+  constructor(private deviceManagement:DeviceManagementService) { 
+    this.devices = [];
+    this.unavailableSerialNumbers = [];
     this.deviceForm = null;
     this.deviceDetails = null;
-    this.deviceToShow = new Device("","",-1);
   }
 
   ngOnInit(): void {
     this.devices = this.deviceManagement.devices;
     this.unavailableSerialNumbers = this.deviceManagement.unavailableSerialNumbers;
-    this.deviceManagement.selectedDevice.subscribe(
-      (selectedDevice:Device)=>{
-        this.deviceToShow = selectedDevice;
-      });
   }
 
   deleteDevice(serialNumber:string):void{
@@ -40,9 +35,7 @@ export class DevicesComponent implements OnInit {
   }
 
   showDeviceDetails(serialNumber:string):void{
-    this.deviceManagement.getDevice(serialNumber);
-    let employee:Employee | null = this.connectionManagement.getEmployee(serialNumber);
-    this.deviceDetails?.showDetails(employee);
+    this.deviceDetails?.showDetails(serialNumber);
   }
 
   editDevice(device:Device):void{

@@ -1,6 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Device } from 'src/Models/device';
 import { Employee } from 'src/Models/employee';
+import { EmployeeDeviceManagementService } from 'src/Services/firebase/employee-device-management-firebase/employee-device-management.service';
 
 @Component({
   selector: 'app-employee-details',
@@ -9,21 +10,31 @@ import { Employee } from 'src/Models/employee';
 })
 export class EmployeeDetailsComponent implements OnInit {
 
-  @Input() selectedEmployee:Employee | null;
-  @Input() employeeDevices:Device[];
+  selectedEmployee:Employee | null;
+  employeeDevices:Device[];
   @ViewChild("detailsToggle") detailsToggle:ElementRef | null;
 
-  constructor() { 
+  constructor( private connectionManagement:EmployeeDeviceManagementService) { 
     this.selectedEmployee = null;
     this.employeeDevices = [];
     this.detailsToggle = null;
   }
 
   ngOnInit(): void {
+    this.connectionManagement.selectedEmployee.subscribe(
+      (selectedEmployee:Employee)=>{
+        this.selectedEmployee = selectedEmployee;
+      }
+    );
+    this.connectionManagement.selectedEmployeeDevices.subscribe(
+      (selectedEmployeeDevices:Device[])=>{
+        this.employeeDevices = selectedEmployeeDevices;
+      }
+    );
   }
 
-  showDetails(devices:Device[]):void{
-    this.employeeDevices = devices;
+  showDetails(employeeId:number):void{
+    this.connectionManagement.selectEmployee(employeeId);
     this.detailsToggle?.nativeElement.click();
   }
 

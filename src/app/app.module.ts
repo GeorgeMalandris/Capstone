@@ -13,6 +13,10 @@ import { DevicesComponent } from './devices/devices.component';
 import { HttpClientModule } from '@angular/common/http';
 import { EmployeeDetailsComponent } from './employees/employee-details/employee-details.component';
 import { DeviceDetailsComponent } from './devices/device-details/device-details.component';
+import { EmployeeDeviceManageComponent } from './employees/employee-device-manage/employee-device-manage.component';
+import { EmployeeManagementService } from 'src/Services/firebase/employee-management-firebase/employee-management.service';
+import { DeviceManagementService } from 'src/Services/firebase/device-management-firebase/device-management.service';
+import { EmployeeDeviceManagementService } from 'src/Services/firebase/employee-device-management-firebase/employee-device-management.service';
 
 @NgModule({
   declarations: [
@@ -24,7 +28,8 @@ import { DeviceDetailsComponent } from './devices/device-details/device-details.
     EmployeesComponent,
     DevicesComponent,
     EmployeeDetailsComponent,
-    DeviceDetailsComponent
+    DeviceDetailsComponent,
+    EmployeeDeviceManageComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +37,11 @@ import { DeviceDetailsComponent } from './devices/device-details/device-details.
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    EmployeeManagementService,
+    DeviceManagementService,
+    EmployeeDeviceManagementService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
