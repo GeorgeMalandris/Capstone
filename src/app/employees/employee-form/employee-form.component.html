@@ -15,16 +15,27 @@
                     <div class="form-group">
                         <label for="emp-name" class="col-form-label">Employee Name*</label>
                         <input id="emp-name" class="form-control" type="text" placeholder="3-255 characters" formControlName="name">
+                        <div *ngIf="employeeForm.controls.name.invalid && employeeForm.controls.name.dirty">
+                            <p *ngIf="(employeeForm.controls.name.errors?.required)" class="form-text text-danger font-weight-bold">The name is required</p>
+                            <p *ngIf="(employeeForm.controls.name.errors?.minlength)" class="form-text text-danger font-weight-bold">The name must be greater than 3 characters</p>
+                            <p *ngIf="(employeeForm.controls.name.errors?.maxlength)" class="form-text text-danger font-weight-bold">The name must be less than 255 characters</p>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="emp-email" class="col-form-label">Employee Email*</label>
                         <input id="emp-email" class="form-control" type="text" formControlName="email">
+                        <div *ngIf="employeeForm.controls.email.invalid && employeeForm.controls.email.dirty">
+                            <p *ngIf="(employeeForm.controls.email.errors?.required)" class="form-text text-danger font-weight-bold">The email is required</p>
+                            <p *ngIf="(employeeForm.controls.email.errors?.minlength)" class="form-text text-danger font-weight-bold">The email must be greater than 3 characters</p>
+                            <p *ngIf="(employeeForm.controls.email.errors?.maxlength)" class="form-text text-danger font-weight-bold">The email must be less than 255 characters</p>
+                            <p *ngIf="(employeeForm.controls.email.errors?.email)" class="form-text text-danger font-weight-bold">Invalid Email</p>
+                        </div>
                     </div>
                     <p class="text-secondary">The fields with * are required</p>
                 </div>
         
                 <div class="modal-footer">
-                    <button class="btn btn-primary" data-dismiss="modal" (click)="sendData($event)" [disabled]="!employeeForm.valid">Submit</button>
+                    <button class="btn btn-primary" data-dismiss="modal" (click)="sendData($event)" [disabled]="!employeeForm.valid || !employeeForm.dirty">Submit</button>
                     <button class="btn btn-danger ml-2" data-dismiss="modal" (click)="onCancel($event)">Close</button>
                 </div>
 
