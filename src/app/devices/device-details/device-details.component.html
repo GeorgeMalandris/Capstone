@@ -2,7 +2,7 @@
 
 <div class="modal fade" id="deviceDetailsModal" data-backdrop="static">
 
-    <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
 
             <div class="modal-header">
@@ -11,9 +11,10 @@
     
             <div class="modal-body">
 
-                <div *ngIf="selectedDevice">
+                <div *ngIf="selectedDevice; then show else emptyMessage"></div>
+                <ng-template #show>
                     <div class="mb-3 mt-3">
-                        <dl class="row">
+                        <dl class="row" *ngIf="selectedDevice">
                             <dt class="col-4">Device Serial Number:</dt>
                             <dl class="col-8">{{selectedDevice.serialNumber}}</dl>
                             <dt class="col-4">Device Description:</dt>
@@ -34,22 +35,26 @@
                         <table class="table lightweight-table" >
                             <thead>
                                 <tr>
-                                    <th>Employee Id</th>
-                                    <th>Employee Name</th>
-                                    <th>Employee Email</th>
+                                    <th class="text-center">Employee Id</th>
+                                    <th class="text-center">Employee Name</th>
+                                    <th class="text-center">Employee Email</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>{{selectedDeviceEmployee.id}}</td>
-                                    <td>{{selectedDeviceEmployee.name}}</td>
-                                    <td>{{selectedDeviceEmployee.email}}</td>
+                                    <td class="text-center">{{selectedDeviceEmployee.id}}</td>
+                                    <td class="text-center">{{selectedDeviceEmployee.name}}</td>
+                                    <td class="text-center">{{selectedDeviceEmployee.email}}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    
-                </div>
+                </ng-template>
+                
+                <ng-template #emptyMessage>
+                    <p>Something failed and we cannot load the device.</p>
+                    <p>Please try again...</p>
+                </ng-template>
                
             </div>
     

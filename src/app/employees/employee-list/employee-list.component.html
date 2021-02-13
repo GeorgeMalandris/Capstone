@@ -8,16 +8,25 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let employee of employeeList">
-            <td class="text-center">{{employee.id}}</td>
-            <td class="text-center">{{employee.name}}</td>
-            <td class="text-center">{{employee.email}}</td>
-            <td class="text-center"> 
-                <button class="btn btn-success" (click)="sendEmployeeToEdit(employee)">Edit</button>
-                <button class="btn btn-danger ml-2" (click)="sendEmployeeToDelete(employee.id)">Delete</button>
-                <button class="btn btn-primary ml-2" (click)="sendEmployeeToShow(employee.id)">Details</button>
-                <button class="btn btn-warning ml-2" (click)="sendEmployeeToManageDevices(employee.id)">Manage Devices</button>
-            </td>
-        </tr>
+        <div *ngIf="employeeList.length > 0; then show else emptyMessage"></div>
+        <ng-template #show>
+            <tr *ngFor="let employee of employeeList">
+                <td class="text-center">{{employee.id}}</td>
+                <td class="text-center">{{employee.name}}</td>
+                <td class="text-center">{{employee.email}}</td>
+                <td class="text-center"> 
+                    <button class="btn btn-success" (click)="sendEmployeeToEdit(employee)">Edit</button>
+                    <button class="btn btn-danger ml-2" (click)="sendEmployeeToDelete(employee.id)">Delete</button>
+                    <button class="btn btn-primary ml-2" (click)="sendEmployeeToShow(employee.id)">Details</button>
+                    <button class="btn btn-warning ml-2" (click)="sendEmployeeToManageDevices(employee.id)">Manage Devices</button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptyMessage>
+            <tr>
+                <td class="text-center" colspan="4">No employees where found...</td>
+            </tr>
+        </ng-template>
+        
     </tbody>
 </table>

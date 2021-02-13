@@ -2,7 +2,7 @@
 
 <div class="modal fade" id="employeeDevicesManageModal" data-backdrop="static">
 
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
                 <div class="modal-header">
@@ -11,8 +11,9 @@
         
                 <div class="modal-body">
 
-                    <div *ngIf="employeeToManage">
-                        <div class="mb-3 mt-3">
+                    <div *ngIf="employeeToManage; then show else emptyMessage"></div>
+                    <ng-template #show>
+                        <div class="mb-3 mt-3" *ngIf="employeeToManage">
                             <dl class="row">
                                 <dt class="col-4">Employee Id:</dt>
                                 <dl class="col-8">{{employeeToManage.id}}</dl>
@@ -34,18 +35,18 @@
                             <table class="table lightweight-table" >
                                 <thead>
                                     <tr>
-                                        <th>Serial Number</th>
-                                        <th>Description</th>
-                                        <th>Type</th>
-                                        <th>Actions</th>
+                                        <th class="text-center">Serial Number</th>
+                                        <th class="text-center">Description</th>
+                                        <th class="text-center">Type</th>
+                                        <th class="text-center">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let employeeDevice of employeeDevices">
-                                        <td>{{employeeDevice.serialNumber}}</td>
-                                        <td>{{employeeDevice.description}}</td>
-                                        <td>{{employeeDevice.type}}</td>
-                                        <td>
+                                        <td class="text-center">{{employeeDevice.serialNumber}}</td>
+                                        <td class="text-center">{{employeeDevice.description}}</td>
+                                        <td class="text-center">{{employeeDevice.type}}</td>
+                                        <td class="text-center">
                                             <button class="btn btn-danger ml-2" (click)="removeDeviceFromEmployee(employeeDevice.serialNumber)">Remove</button>
                                         </td>
                                     </tr>
@@ -61,26 +62,30 @@
                             <table class="table lightweight-table" >
                                 <thead>
                                     <tr>
-                                        <th>Serial Number</th>
-                                        <th>Description</th>
-                                        <th>Type</th>
-                                        <th>Actions</th>
+                                        <th class="text-center">Serial Number</th>
+                                        <th class="text-center">Description</th>
+                                        <th class="text-center">Type</th>
+                                        <th class="text-center">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let availableDevice of availableDevices">
-                                        <td>{{availableDevice.serialNumber}}</td>
-                                        <td>{{availableDevice.description}}</td>
-                                        <td>{{availableDevice.type}}</td>
-                                        <td>
+                                        <td class="text-center">{{availableDevice.serialNumber}}</td>
+                                        <td class="text-center">{{availableDevice.description}}</td>
+                                        <td class="text-center">{{availableDevice.type}}</td>
+                                        <td class="text-center">
                                             <button class="btn btn-success" (click)="addDeviceToEmployee(availableDevice.serialNumber)">Add</button>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </ng-template>
-                        
-                    </div>
+                    </ng-template>
+
+                    <ng-template #emptyMessage>
+                        <p>Something failed and we cannot load the employee.</p>
+                        <p>Please try again...</p>
+                    </ng-template>
                    
                 </div>
         

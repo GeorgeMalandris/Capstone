@@ -8,15 +8,23 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let device of deviceList">
-            <td class="text-center">{{device.serialNumber}}</td>
-            <td class="text-center">{{device.description}}</td>
-            <td class="text-center">{{device.type}}</td>
-            <td class="text-center">
-                <button class="btn btn-success" (click)="sendDeviceToEdit(device)">Edit</button>
-                <button class="btn btn-danger ml-2" (click)="sendDeviceToDelete(device.serialNumber)">Delete</button>
-                <button class="btn btn-primary ml-2" (click)="sendDeviceToShow(device.serialNumber)">Details</button>
-            </td>
-        </tr>
+        <div *ngIf="deviceList.length > 0; then show else emptyMessage"></div>
+        <ng-template #show>
+            <tr *ngFor="let device of deviceList">
+                <td class="text-center">{{device.serialNumber}}</td>
+                <td class="text-center">{{device.description}}</td>
+                <td class="text-center">{{device.type}}</td>
+                <td class="text-center">
+                    <button class="btn btn-success" (click)="sendDeviceToEdit(device)">Edit</button>
+                    <button class="btn btn-danger ml-2" (click)="sendDeviceToDelete(device.serialNumber)">Delete</button>
+                    <button class="btn btn-primary ml-2" (click)="sendDeviceToShow(device.serialNumber)">Details</button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptyMessage>
+            <tr>
+                <td class="text-center" colspan="4">No devices where found...</td>
+            </tr>
+        </ng-template>
     </tbody>
 </table>

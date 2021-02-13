@@ -41,44 +41,60 @@ export class EmployeeDeviceManagementService {
           this.employeeDeviceConnections.push(connection);
         }
         this.availableDevices.emit(this.getAvailableDevices());
-      } 
+      },
+      (error)=>{
+        alert("Something went wrong while loading the employee - device connections.\nPlease try again later.")
+      }
     );
   }
 
   addEmployeeDeviceConnection(employeeDeviceConnection:EmployeeDeviceConnection):void{
-    this.http.post("https://capstonedb-a452b-default-rtdb.firebaseio.com/EmployeeDevice.json", employeeDeviceConnection).subscribe(
+    let validInsert:boolean = this.checkValidInsert(employeeDeviceConnection);
+    if(validInsert){
+      this.http.post("https://capstonedb-a452b-default-rtdb.firebaseio.com/EmployeeDevice.json", employeeDeviceConnection).subscribe(
       (firebaseKey:any)=>{
           this.employeeDeviceConnections.push(new FirebaseEmployeeDeviceConnection(firebaseKey.name,employeeDeviceConnection.employeeId,employeeDeviceConnection.deviceSerialNumber));
           this.availableDevices.emit(this.getAvailableDevices());
-          if(employeeDeviceConnection.employeeId === this.employeeSelected?.id){
+          if(this.employeeSelected && employeeDeviceConnection.employeeId === this.employeeSelected.id){
             this.selectedEmployeeDevices.emit(this.getEmployeeDevices(this.employeeSelected?.id));
           }
+        },
+        (error)=>{
+          alert("The device is already assigned in an employee.\nYou cannot assign it to someone else.")
         }
-    );
+      );
+    }
+    else{
+      alert("The connection you are trying to add is not valid.\nPlease check the employee ID and the device Serial Number.")
+    }
   }
 
   removeEmployeeDeviceConnection(employeeDeviceConnection:EmployeeDeviceConnection):void{
     let firebaseKey:string = this.getFirebaseKey(employeeDeviceConnection);
-    this.http.delete("https://capstonedb-a452b-default-rtdb.firebaseio.com/EmployeeDevice/" + firebaseKey + ".json").subscribe(
+    if(firebaseKey){
+      this.http.delete("https://capstonedb-a452b-default-rtdb.firebaseio.com/EmployeeDevice/" + firebaseKey + ".json").subscribe(
       ()=>{
         this.employeeDeviceConnections.splice(this.employeeDeviceConnections.findIndex(
           (connection:FirebaseEmployeeDeviceConnection)=>{
             return connection.firebaseKey === firebaseKey
           }),1);
           this.availableDevices.emit(this.getAvailableDevices());
-          if(employeeDeviceConnection.employeeId === this.employeeSelected?.id){
+          if(this.employeeSelected && employeeDeviceConnection.employeeId === this.employeeSelected.id){
             this.selectedEmployeeDevices.emit(this.getEmployeeDevices(this.employeeSelected?.id));
           }
+        },
+        (error)=>{
+          alert("Something went wrong while removing the device from the employee.\nPlease try again later.")
         }
-    );
+      );
+    }
+    else{
+      alert("The connection you are trying to remove does not exist.\nPlease check the employee ID and the device Serial Number.")
+    }
   }
 
   selectEmployee(employeeId:number):void{
-    let employeeIndex:number = this.employees.findIndex(
-      (employee:FirebaseEmployee)=>{
-        return employee.id === employeeId;
-      }
-    );
+    let employeeIndex:number = this.getEmployeeIndex(employeeId);
 
     if(employeeIndex !== -1 ){
       this.employeeSelected = this.employees[employeeIndex];
@@ -89,16 +105,13 @@ export class EmployeeDeviceManagementService {
     else{
       this.employeeSelected = null;
       this.selectedDevice.emit(this.employeeSelected);
-      this.selectedDeviceEmployee.emit();
+      this.selectedDeviceEmployee.emit(null);
+      this.availableDevices.emit(null);
     }
   }
 
   selectDevice(deviceSerialNumber:string):void{
-    let deviceIndex:number = this.deviceInventory.findIndex(
-      (device:FirebaseDevice)=>{
-        return device.serialNumber === deviceSerialNumber;
-      }
-    );
+    let deviceIndex:number = this.getDeviceIndex(deviceSerialNumber);
 
     if(deviceIndex !== -1 ){
       this.deviceSelected = this.deviceInventory[deviceIndex];
@@ -108,34 +121,60 @@ export class EmployeeDeviceManagementService {
     else{
       this.deviceSelected = null;
       this.selectedDevice.emit(this.deviceSelected);
-      this.selectedDeviceEmployee.emit();
+      this.selectedDeviceEmployee.emit(null);
     }
+  }
+
+  checkEmployeeDelete(employeeId:number):boolean{
+    return this.getEmployeeDevices(employeeId).length === 0;
+  }
+
+  checkDeviceDelete(deviceSerialNumber:string):boolean{
+    return this.getConnectionIndex(deviceSerialNumber) === -1;
+  }
+
+  getEmployeeConnections(employeeId:number):FirebaseEmployeeDeviceConnection[]{
+    return this.employeeDeviceConnections.filter(
+      (connection:FirebaseEmployeeDeviceConnection)=>{
+        return connection.employeeId === employeeId;
+      }
+    );
+  }
+
+  getDeviceConnections(deviceSerialNumber:string):FirebaseEmployeeDeviceConnection[]{
+    return this.employeeDeviceConnections.filter(
+      (connection:FirebaseEmployeeDeviceConnection)=>{
+        return connection.deviceSerialNumber === deviceSerialNumber;
+      }
+    );
   }
   
   private getAvailableDevices():FirebaseDevice[]{
     let availableDevices:FirebaseDevice[] = [];
 
     for(let device of this.deviceInventory){
-      let index:number = this.getConnectionIndex(null,device.serialNumber);
+      let index:number = this.getConnectionIndex(device.serialNumber);
       if(index === -1){
         availableDevices.push(device);
       }
     }
     return availableDevices;
   }
+  
   private getEmployeeDevices(employeeId:number):FirebaseDevice[]{
     let employeeDevices:FirebaseDevice[] = [];
     for(let device of this.deviceInventory){
-      let index:number = this.getConnectionIndex(employeeId,device.serialNumber);
+      let index:number = this.getConnectionIndex(device.serialNumber,employeeId);
       if(index !== -1){
         employeeDevices.push(device);
       }
     }
     return employeeDevices;
   }
+
   private getEmployeeFromDevice(deviceSerialNumber:string):Employee | null{
 
-    let connectionIndex:number = this.getConnectionIndex(null,deviceSerialNumber);
+    let connectionIndex:number = this.getConnectionIndex(deviceSerialNumber);
     if(connectionIndex === -1)
       return null;
 
@@ -146,15 +185,37 @@ export class EmployeeDeviceManagementService {
 
     return this.employees[employeeIndex];
   }
-  private getConnectionIndex(employeeId:number | null = null, deviceSerialNumber:string | null = null): number{
+
+  private getEmployeeIndex(employeeId:number): number{
+    return this.employees.findIndex(
+      (employee:FirebaseEmployee)=>{
+        return employee.id === employeeId;
+      }
+    );
+  }
+
+  private getDeviceIndex(deviceSerialNumber:string): number{
+    return this.deviceInventory.findIndex(
+      (device:FirebaseDevice)=>{
+        return device.serialNumber === deviceSerialNumber;
+      }
+    );
+  }
+
+  private getFirebaseKey(connection:EmployeeDeviceConnection): string{
+    let connectionIndex:number = this.getConnectionIndex(connection.deviceSerialNumber, connection.employeeId);
+    if(connectionIndex === -1)
+      return "";
+    
+    return this.employeeDeviceConnections[connectionIndex].firebaseKey;
+  }
+
+  private getConnectionIndex(deviceSerialNumber:string, employeeId:number | null = null, ): number{
     return this.employeeDeviceConnections.findIndex(
       (connection:FirebaseEmployeeDeviceConnection)=>{
 
         if(employeeId && deviceSerialNumber)
           return connection.employeeId === employeeId && deviceSerialNumber === connection.deviceSerialNumber;
-
-        if(employeeId)
-          return connection.employeeId === employeeId;
 
         if(deviceSerialNumber)
           return deviceSerialNumber === connection.deviceSerialNumber;
@@ -163,26 +224,21 @@ export class EmployeeDeviceManagementService {
       }
     );
   }
-  private getEmployeeIndex(employeeId:number): number{
-    return this.employees.findIndex(
-      (employee:FirebaseEmployee)=>{
-        return employee.id === employeeId;
-      }
-    );
-  }
-  private getDeviceIndex(deviceSerialNumber:string): number{
-    return this.deviceInventory.findIndex(
-      (device:FirebaseDevice)=>{
-        return device.serialNumber === deviceSerialNumber;
-      }
-    );
-  }
-  private getFirebaseKey(connection:EmployeeDeviceConnection): string{
-    let connectionIndex:number = this.getConnectionIndex(connection.employeeId,connection.deviceSerialNumber);
-    if(connectionIndex === -1)
-      return "";
-    
-    return this.employeeDeviceConnections[connectionIndex].firebaseKey;
+
+  private checkValidInsert(connection:EmployeeDeviceConnection):boolean{
+    let employeeIndex:number = this.getEmployeeIndex(connection.employeeId);
+    if(employeeIndex === -1)
+      return false;
+
+    let deviceIndex:number = this.getDeviceIndex(connection.deviceSerialNumber);
+    if(deviceIndex === -1)
+      return false;
+
+    let connectionIndex:number = this.getConnectionIndex(connection.deviceSerialNumber, connection.employeeId);
+    if(connectionIndex !== -1)
+      return false;
+
+    return true;
   }
 
 }

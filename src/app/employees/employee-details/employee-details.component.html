@@ -2,7 +2,7 @@
 
 <div class="modal fade" id="employeeDetailsModal" data-backdrop="static">
 
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
                 <div class="modal-header">
@@ -11,9 +11,10 @@
         
                 <div class="modal-body">
 
-                    <div *ngIf="selectedEmployee">
+                    <div *ngIf="selectedEmployee; then show else emptyMessage"></div>
+                    <ng-template #show>
                         <div class="mb-3 mt-3">
-                            <dl class="row">
+                            <dl class="row" *ngIf="selectedEmployee">
                                 <dt class="col-4">Employee Id:</dt>
                                 <dl class="col-8">{{selectedEmployee.id}}</dl>
                                 <dt class="col-4">Employee Name:</dt>
@@ -24,7 +25,6 @@
                         </div>
 
                         <div *ngIf="employeeDevices.length > 0; then showDevices else noDevices"></div>
-    
                         <ng-template #noDevices>The employee does not have any devices.</ng-template>
                         <ng-template #showDevices>
                             <div class="row mb-1">
@@ -33,22 +33,26 @@
                             <table class="table lightweight-table" >
                                 <thead>
                                     <tr>
-                                        <th>Serial Number</th>
-                                        <th>Description</th>
-                                        <th>Type</th>
+                                        <th class="text-center">Serial Number</th>
+                                        <th class="text-center">Description</th>
+                                        <th class="text-center">Type</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let employeeDevice of employeeDevices">
-                                        <td>{{employeeDevice.serialNumber}}</td>
-                                        <td>{{employeeDevice.description}}</td>
-                                        <td>{{employeeDevice.type}}</td>
+                                        <td class="text-center">{{employeeDevice.serialNumber}}</td>
+                                        <td class="text-center">{{employeeDevice.description}}</td>
+                                        <td class="text-center">{{employeeDevice.type}}</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </ng-template>
-                        
-                    </div>
+                    </ng-template>
+                    
+                    <ng-template #emptyMessage>
+                        <p>Something failed and we cannot load the employee.</p>
+                        <p>Please try again...</p>
+                    </ng-template>
                    
                 </div>
         

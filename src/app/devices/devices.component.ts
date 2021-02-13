@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Device } from 'src/Models/device';
-import { Employee } from 'src/Models/employee';
+import { EmployeeDeviceConnection } from 'src/Models/employee-device-connection';
 import { DeviceManagementService } from 'src/Services/firebase/device-management-firebase/device-management.service';
 import { EmployeeDeviceManagementService } from 'src/Services/firebase/employee-device-management-firebase/employee-device-management.service';
 import { DeviceDetailsComponent } from './device-details/device-details.component';
@@ -18,7 +18,7 @@ export class DevicesComponent implements OnInit {
   @ViewChild("deviceForm") deviceForm:DeviceFormComponent | null;
   @ViewChild("deviceDetails") deviceDetails:DeviceDetailsComponent | null;
   
-  constructor(private deviceManagement:DeviceManagementService) { 
+  constructor(private deviceManagement:DeviceManagementService, private employeeDeviceManagement: EmployeeDeviceManagementService) { 
     this.devices = [];
     this.unavailableSerialNumbers = [];
     this.deviceForm = null;
@@ -31,7 +31,22 @@ export class DevicesComponent implements OnInit {
   }
 
   deleteDevice(serialNumber:string):void{
+    if(this.employeeDeviceManagement.checkDeviceDelete(serialNumber)){
+      this.deviceManagement.deleteDevice(serialNumber);
+      return;
+    }
+
+    let cascadeDeleteConfirm: boolean = confirm(`The employee has devices assigned to him and he cannot be deleted.
+                                                \nWould you like to remove the devices automatically and delete him?`);
+    if(!cascadeDeleteConfirm)
+      return;
+
+    let connectionsToRemove: EmployeeDeviceConnection[] = this.employeeDeviceManagement.getDeviceConnections(serialNumber);
+    for (let connection of connectionsToRemove){
+      this.employeeDeviceManagement.removeEmployeeDeviceConnection(connection);
+    }
     this.deviceManagement.deleteDevice(serialNumber);
+    
   }
 
   showDeviceDetails(serialNumber:string):void{

@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { Device } from 'src/Models/device';
 import { Employee } from 'src/Models/employee';
+import { EmployeeDeviceConnection } from 'src/Models/employee-device-connection';
 import { EmployeeDeviceManagementService } from 'src/Services/firebase/employee-device-management-firebase/employee-device-management.service';
 import { EmployeeManagementService } from 'src/Services/firebase/employee-management-firebase/employee-management.service';
 import { EmployeeDetailsComponent } from './employee-details/employee-details.component';
@@ -19,7 +19,7 @@ export class EmployeesComponent implements OnInit {
   @ViewChild("employeeDetails") employeeDetails:EmployeeDetailsComponent | null;
   @ViewChild("manageEmployeeDevices") manageEmployeeDevices:EmployeeDeviceManageComponent | null;
   
-  constructor(private employeeManagement:EmployeeManagementService) { 
+  constructor(private employeeManagement:EmployeeManagementService, private employeeDeviceManagement: EmployeeDeviceManagementService) { 
     this.employees = [];
     this.employeeForm = null;
     this.employeeDetails = null;
@@ -31,6 +31,20 @@ export class EmployeesComponent implements OnInit {
   }
 
   deleteEmployee(employeeId:number):void{
+    if(this.employeeDeviceManagement.checkEmployeeDelete(employeeId)){
+      this.employeeManagement.deleteEmployee(employeeId);
+      return;
+    }
+    
+    let cascadeDeleteConfirm: boolean = confirm(`The employee has devices assigned to him and he cannot be deleted.
+                                                \nWould you like to remove the devices automatically and delete him?`);
+    if(!cascadeDeleteConfirm)
+      return;
+
+    let connectionsToRemove: EmployeeDeviceConnection[] = this.employeeDeviceManagement.getEmployeeConnections(employeeId);
+    for (let connection of connectionsToRemove){
+      this.employeeDeviceManagement.removeEmployeeDeviceConnection(connection);
+    }
     this.employeeManagement.deleteEmployee(employeeId);
   }
 
@@ -57,7 +71,6 @@ export class EmployeesComponent implements OnInit {
   }
 
   openManageEmployeeDevices(employeeId:number):void{
-    this.employeeManagement.getEmployee(employeeId);
     this.manageEmployeeDevices?.openEmployeeDevicesManage(employeeId);
   }
 
