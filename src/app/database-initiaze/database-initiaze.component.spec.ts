@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 
 import { DatabaseInitiazeComponent } from './database-initiaze.component';
 
@@ -8,6 +9,8 @@ describe('DatabaseInitiazeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports:[FormsModule],
+      providers: [],
       declarations: [ DatabaseInitiazeComponent ]
     })
     .compileComponents();

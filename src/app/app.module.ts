@@ -19,6 +19,8 @@ import { DeviceManagementService } from 'src/Services/firebase/device-management
 import { EmployeeDeviceManagementService } from 'src/Services/firebase/employee-device-management-firebase/employee-device-management.service';
 import { DatabaseConnectionService } from 'src/Services/firebase/database-connection/database-connection.service';
 import { DatabaseInitiazeComponent } from './database-initiaze/database-initiaze.component';
+import { HeaderComponent } from './header/header.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { DatabaseInitiazeComponent } from './database-initiaze/database-initiaze
     EmployeeDetailsComponent,
     DeviceDetailsComponent,
     EmployeeDeviceManageComponent,
-    DatabaseInitiazeComponent
+    DatabaseInitiazeComponent,
+    HeaderComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

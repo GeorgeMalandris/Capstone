@@ -2,6 +2,6 @@ import { FirebaseEmployeeDeviceConnection } from './firebase-employee-device-con
 
 describe('FirebaseEmployeeDeviceConnection', () => {
   it('should create an instance', () => {
-    expect(new FirebaseEmployeeDeviceConnection()).toBeTruthy();
+    expect(new FirebaseEmployeeDeviceConnection("testFirebaseKey",1,"testSerialNumber")).toBeTruthy();
   });
 });

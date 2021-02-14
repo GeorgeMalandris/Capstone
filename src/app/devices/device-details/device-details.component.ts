@@ -10,8 +10,8 @@ import { EmployeeDeviceManagementService } from 'src/Services/firebase/employee-
 })
 export class DeviceDetailsComponent implements OnInit {
 
-  @Input() selectedDevice:Device | null;
-  @Input() selectedDeviceEmployee:Employee | null;
+  selectedDevice:Device | null;
+  selectedDeviceEmployee:Employee | null;
   @ViewChild("detailsToggle") detailsToggle:ElementRef | null;
 
   constructor(private connectionManagement:EmployeeDeviceManagementService) { 

@@ -1,0 +1,6 @@
+<footer>
+    <p *ngIf="databaseString;else noDatabase">Current Database: {{databaseString}}</p>
+    <ng-template #noDatabase>
+        <p>Current Database: No Database Selected</p>
+    </ng-template>
+</footer>
