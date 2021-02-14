@@ -1,4 +1,5 @@
 import { Component} from '@angular/core';
+import { Router } from '@angular/router';
 import { DatabaseConnectionService } from 'src/Services/firebase/database-connection/database-connection.service';
 import { connectionStrings } from './connectionStrings'
 
@@ -11,7 +12,7 @@ export class AppComponent {
   title = 'Capstone';
   database:string | null;
 
-  constructor(private databaseConnection:DatabaseConnectionService){
+  constructor(private databaseConnection:DatabaseConnectionService, private router:Router){
     this.database = this.databaseConnection.getDatabase();
   }
 
@@ -27,6 +28,7 @@ export class AppComponent {
 
     this.databaseConnection.setDatabase(connectionStrings[dbEnum]);
     this.database = this.databaseConnection.getDatabase();
+    this.router.navigate(["home"]);
   }
 
 }
