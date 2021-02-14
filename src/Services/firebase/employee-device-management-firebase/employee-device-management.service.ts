@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { Employee } from 'src/Models/employee';
 import { EmployeeDeviceConnection } from 'src/Models/employee-device-connection';
+import { DatabaseConnectionService } from '../database-connection/database-connection.service';
 import { DeviceManagementService } from '../device-management-firebase/device-management.service';
 import { EmployeeManagementService } from '../employee-management-firebase/employee-management.service';
 import { FirebaseDevice } from '../firebase-models/firebase-device';
@@ -13,18 +14,22 @@ import { FirebaseEmployeeDeviceConnection } from '../firebase-models/firebase-em
 })
 export class EmployeeDeviceManagementService {
 
-  employeeDeviceConnections:FirebaseEmployeeDeviceConnection[];
+  private databaseString!:string | null;
+
+  employeeDeviceConnections!:FirebaseEmployeeDeviceConnection[];
   @Output() availableDevices = new EventEmitter();
   @Output() selectedEmployee = new EventEmitter();
   @Output() selectedEmployeeDevices = new EventEmitter();
   @Output() selectedDevice = new EventEmitter();
   @Output() selectedDeviceEmployee = new EventEmitter();
-  private employeeSelected:FirebaseEmployee | null;
-  private deviceSelected:FirebaseDevice | null;
-  private deviceInventory:FirebaseDevice[];
-  private employees:FirebaseEmployee[];
+  private employeeSelected!:FirebaseEmployee | null;
+  private deviceSelected!:FirebaseDevice | null;
+  private deviceInventory!:FirebaseDevice[];
+  private employees!:FirebaseEmployee[];
 
-  constructor(private http:HttpClient, private deviceManagement:DeviceManagementService, private employeeManagement:EmployeeManagementService) { 
+  constructor(private database:DatabaseConnectionService, private http:HttpClient, private deviceManagement:DeviceManagementService, 
+    private employeeManagement:EmployeeManagementService) { 
+    this.databaseString = this.database.getDatabase();
     this.employeeDeviceConnections = [];
     this.employeeSelected = null;
     this.deviceSelected = null;
@@ -34,7 +39,9 @@ export class EmployeeDeviceManagementService {
   }
   
   private getEmployeeDeviceConnections():void{
-    this.http.get("https://capstonedb-a452b-default-rtdb.firebaseio.com/EmployeeDevice.json").subscribe(
+    if(!this.databaseString)
+      return;
+    this.http.get(this.databaseString + "/EmployeeDevice.json").subscribe(
       (employeeDeviceConnections:any)=>{
         for(let key in employeeDeviceConnections){
           let connection = new FirebaseEmployeeDeviceConnection(key,employeeDeviceConnections[key].employeeId,employeeDeviceConnections[key].deviceSerialNumber);
@@ -49,9 +56,11 @@ export class EmployeeDeviceManagementService {
   }
 
   addEmployeeDeviceConnection(employeeDeviceConnection:EmployeeDeviceConnection):void{
+    if(!this.databaseString)
+      return;
     let validInsert:boolean = this.checkValidInsert(employeeDeviceConnection);
     if(validInsert){
-      this.http.post("https://capstonedb-a452b-default-rtdb.firebaseio.com/EmployeeDevice.json", employeeDeviceConnection).subscribe(
+      this.http.post(this.databaseString + "/EmployeeDevice.json", employeeDeviceConnection).subscribe(
       (firebaseKey:any)=>{
           this.employeeDeviceConnections.push(new FirebaseEmployeeDeviceConnection(firebaseKey.name,employeeDeviceConnection.employeeId,employeeDeviceConnection.deviceSerialNumber));
           this.availableDevices.emit(this.getAvailableDevices());
@@ -70,9 +79,11 @@ export class EmployeeDeviceManagementService {
   }
 
   removeEmployeeDeviceConnection(employeeDeviceConnection:EmployeeDeviceConnection):void{
+    if(!this.databaseString)
+      return;
     let firebaseKey:string = this.getFirebaseKey(employeeDeviceConnection);
     if(firebaseKey){
-      this.http.delete("https://capstonedb-a452b-default-rtdb.firebaseio.com/EmployeeDevice/" + firebaseKey + ".json").subscribe(
+      this.http.delete(this.databaseString + "/EmployeeDevice/" + firebaseKey + ".json").subscribe(
       ()=>{
         this.employeeDeviceConnections.splice(this.employeeDeviceConnections.findIndex(
           (connection:FirebaseEmployeeDeviceConnection)=>{

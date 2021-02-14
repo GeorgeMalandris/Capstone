@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EmployeeFormComponent } from './employees/employee-form/employee-form.component';
 import { DeviceFormComponent } from './devices/device-form/device-form.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EmployeeListComponent } from './employees/employee-list/employee-list.component';
 import { DeviceListComponent } from './devices/device-list/device-list.component';
 import { EmployeesComponent } from './employees/employees.component';
@@ -17,6 +17,8 @@ import { EmployeeDeviceManageComponent } from './employees/employee-device-manag
 import { EmployeeManagementService } from 'src/Services/firebase/employee-management-firebase/employee-management.service';
 import { DeviceManagementService } from 'src/Services/firebase/device-management-firebase/device-management.service';
 import { EmployeeDeviceManagementService } from 'src/Services/firebase/employee-device-management-firebase/employee-device-management.service';
+import { DatabaseConnectionService } from 'src/Services/firebase/database-connection/database-connection.service';
+import { DatabaseInitiazeComponent } from './database-initiaze/database-initiaze.component';
 
 @NgModule({
   declarations: [
@@ -29,18 +31,21 @@ import { EmployeeDeviceManagementService } from 'src/Services/firebase/employee-
     DevicesComponent,
     EmployeeDetailsComponent,
     DeviceDetailsComponent,
-    EmployeeDeviceManageComponent
+    EmployeeDeviceManageComponent,
+    DatabaseInitiazeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [
     EmployeeManagementService,
     DeviceManagementService,
-    EmployeeDeviceManagementService
+    EmployeeDeviceManagementService,
+    DatabaseConnectionService
   ],
   bootstrap: [AppComponent]
 })

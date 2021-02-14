@@ -2,24 +2,30 @@ import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { FirebaseDevice } from 'src/Services/firebase/firebase-models/firebase-device';
 import { Device } from 'src/Models/device';
+import { DatabaseConnectionService } from '../database-connection/database-connection.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DeviceManagementService {
 
-  devices:FirebaseDevice[];
-  @Output() selectedDevice = new EventEmitter();
-  unavailableSerialNumbers:string[];
+  private databaseString!:string | null;
 
-  constructor(private http:HttpClient) { 
+  devices!:FirebaseDevice[];
+  @Output() selectedDevice = new EventEmitter();
+  unavailableSerialNumbers!:string[];
+
+  constructor(private database:DatabaseConnectionService, private http:HttpClient) { 
+    this.databaseString = this.database.getDatabase();
     this.devices = [];
     this.unavailableSerialNumbers = [];
     this.getDevices();
   }
 
   getDevices():void{
-    this.http.get("https://capstonedb-a452b-default-rtdb.firebaseio.com/Devices.json").subscribe(
+    if(!this.databaseString)
+      return;
+    this.http.get(this.databaseString + "/Devices.json").subscribe(
       (devices:any)=>{
         for(let key in devices){
           let device = new FirebaseDevice(key,devices[key].serialNumber,devices[key].description,devices[key].type);
@@ -34,9 +40,11 @@ export class DeviceManagementService {
   }
 
   getDevice(serialNumber:string):void{
+    if(!this.databaseString)
+      return;
     let firebaseKey:string = this.getFirebaseKey(serialNumber);
     if(firebaseKey){
-      this.http.get("https://capstonedb-a452b-default-rtdb.firebaseio.com/Devices/" + firebaseKey + ".json").subscribe(
+      this.http.get(this.databaseString + "/Devices/" + firebaseKey + ".json").subscribe(
       (device:any)=>{
         let newDeviceSelection = new FirebaseDevice(firebaseKey,device.serialNumber,device.description,device.type);
         this.selectedDevice.emit(newDeviceSelection);
@@ -53,9 +61,11 @@ export class DeviceManagementService {
   }
 
   addDevice(device:Device):void{
+    if(!this.databaseString)
+      return;
     let firebaseKey:string = this.getFirebaseKey(device.serialNumber);
     if(!firebaseKey){
-      this.http.post("https://capstonedb-a452b-default-rtdb.firebaseio.com/Devices.json", device).subscribe(
+      this.http.post(this.databaseString + "/Devices.json", device).subscribe(
       (firebaseKey:any)=>{
           this.devices.push(new FirebaseDevice(firebaseKey.name,device.serialNumber,device.description,device.type));
           this.unavailableSerialNumbers.push(device.serialNumber);
@@ -71,9 +81,11 @@ export class DeviceManagementService {
   }
 
   editDevice(deviceToEdit:Device):void{
+    if(!this.databaseString)
+      return;
     let firebaseKey:string = this.getFirebaseKey(deviceToEdit.serialNumber);
     if(firebaseKey){
-      this.http.put("https://capstonedb-a452b-default-rtdb.firebaseio.com/Devices/" + firebaseKey + ".json", deviceToEdit).subscribe(
+      this.http.put(this.databaseString + "/Devices/" + firebaseKey + ".json", deviceToEdit).subscribe(
       (device:any)=>{
         this.devices.splice(this.devices.findIndex(
           (device:FirebaseDevice)=>{
@@ -93,9 +105,11 @@ export class DeviceManagementService {
   }
 
   deleteDevice(serialNumber:string):void{
+    if(!this.databaseString)
+      return;
     let firebaseKey:string = this.getFirebaseKey(serialNumber);
     if(firebaseKey){
-      this.http.delete("https://capstonedb-a452b-default-rtdb.firebaseio.com/Devices/" + firebaseKey + ".json").subscribe(
+      this.http.delete(this.databaseString + "/Devices/" + firebaseKey + ".json").subscribe(
       ()=>{
         this.devices.splice(this.devices.findIndex(
           (device:FirebaseDevice)=>{
