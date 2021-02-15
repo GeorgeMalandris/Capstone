@@ -11,9 +11,9 @@ export class EmployeeManagementService {
 
   private databaseString!:string | null;
 
-  employees!:FirebaseEmployee[];
+  employees:FirebaseEmployee[];
   @Output() selectedEmployee = new EventEmitter();
-  nextId!:number;
+  nextId:number;
 
   constructor(private database:DatabaseConnectionService, private http:HttpClient) { 
     this.databaseString = this.database.getDatabase();

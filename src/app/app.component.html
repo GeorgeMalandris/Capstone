@@ -6,15 +6,13 @@
     <body>
 
         <div *ngIf="!database;then databaseInitialize else mainApp"></div>
-        
         <ng-template #databaseInitialize>
             <app-database-initiaze (sendConnectionStringEnum)="initializeDatabase($event)"></app-database-initiaze>
         </ng-template>
-
         <ng-template #mainApp>
                 <router-outlet></router-outlet>
         </ng-template>
-
+        
     </body>
 
     <app-footer [databaseString]="database"></app-footer>
