@@ -2,12 +2,6 @@
 <h3 class="mb-3">Please choose the database you want to work on.</h3>
     <form #dbSelectionForm="ngForm" (ngSubmit)="sendData()">
         <div class="form-group text-left">
-            <div class="form-control mt-2 mb-2">
-                <label class="form-check-inline">
-                    <input type="radio" value="0" name="dbSelection" [(ngModel)]="dbSelection"> 
-                    <h5 class="font-weight-bold ml-3">TEST Database</h5>
-                </label>
-            </div>
             <div class="form-control  mt-2 mb-2">
                 <label class="form-check-inline">
                     <input type="radio" value="1" name="dbSelection" [(ngModel)]="dbSelection"> 
