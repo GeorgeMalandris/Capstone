@@ -1,0 +1,67 @@
+{
+  "Devices" : {
+    "-MTarJcISRP-l7QSvIjN" : {
+      "description" : "samsung mobile phone",
+      "serialNumber" : "serial-number-1",
+      "type" : "1"
+    },
+    "-MTarOcsLEvjkeKk3Ns4" : {
+      "description" : "xiaomi mobile phone",
+      "serialNumber" : "serial-number-2",
+      "type" : "1"
+    },
+    "-MTaraCY_1sS0oyW9R2j" : {
+      "description" : "asus laptop",
+      "serialNumber" : "serial-number-3",
+      "type" : "2"
+    },
+    "-MTargE_Z9OXyf3aXeay" : {
+      "description" : "hp laptop",
+      "serialNumber" : "serial-number-4",
+      "type" : "2"
+    },
+    "-MTarpWzZja_h6uR_KN-" : {
+      "description" : "lenovo tablet",
+      "serialNumber" : "serial-number-5",
+      "type" : "3"
+    }
+  },
+  "EmployeeDevice" : {
+    "-MTaszaK5P8Vy7BgKdgT" : {
+      "deviceSerialNumber" : "serial-number-2",
+      "employeeId" : 1
+    },
+    "-MTat-Pl9qAAnyWlP8to" : {
+      "deviceSerialNumber" : "serial-number-3",
+      "employeeId" : 1
+    },
+    "-MTat0VSLz6w72_7ZA5n" : {
+      "deviceSerialNumber" : "serial-number-4",
+      "employeeId" : 2
+    },
+    "-MTat1XZn9Rk3s1BMRRD" : {
+      "deviceSerialNumber" : "serial-number-1",
+      "employeeId" : 3
+    }
+  },
+  "Employees" : {
+    "-MTar2-Ebf1MsZOeipLM" : {
+      "email" : "georgemalandris@gmail.com",
+      "id" : 1,
+      "name" : "George Malandris"
+    },
+    "-MTarAovrN_dZECHIWNY" : {
+      "email" : "johndoe@gmail.com",
+      "id" : 2,
+      "name" : "John Doe"
+    },
+    "-MTasxpKN5ss28qkpji5" : {
+      "email" : "mariapapadopoulou@gmail.com",
+      "id" : 3,
+      "name" : "Maria Papadopoulou"
+    }
+  },
+  "NextEmployeeId" : {
+    "id" : 4
+  }
+}
