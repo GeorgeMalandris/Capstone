@@ -129,7 +129,7 @@ export class EmployeeManagementService {
   private getNextEmployeeId():void{
     if(!this.databaseString)
       return;
-    this.http.get("https://capstonedb-a452b-default-rtdb.firebaseio.com/NextEmployeeId.json").subscribe(
+    this.http.get(this.databaseString + "/NextEmployeeId.json").subscribe(
       (nextId:any)=>{
         this.nextId = nextId.id;
       }
@@ -139,7 +139,7 @@ export class EmployeeManagementService {
   private setNextEmployeeId():void{
     if(!this.databaseString)
       return;
-    this.http.put("https://capstonedb-a452b-default-rtdb.firebaseio.com/NextEmployeeId/id.json",this.nextId).subscribe(
+    this.http.put(this.databaseString + "/NextEmployeeId/id.json",this.nextId).subscribe(
       (nextId:any)=>{
         this.nextId = nextId;
       }
