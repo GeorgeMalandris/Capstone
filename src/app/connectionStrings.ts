@@ -1,6 +1,6 @@
 export enum connectionStrings{
-    //"https://capstonedb-a452b-default-rtdb.firebaseio.com/",
-    "https://capstonedb-act-default-rtdb.firebaseio.com/" = 1,
-    "https://capstonedb-dataviva-default-rtdb.firebaseio.com/",
-    "https://capstonedb-onelity-default-rtdb.firebaseio.com/"
+    //"https://capstonedb-86fb1-default-rtdb.firebaseio.com/",
+    "https://capstonedb-act-3d9c1-default-rtdb.firebaseio.com/" = 1,
+    "https://capstonedb-dataviva-928c8-default-rtdb.firebaseio.com/",
+    "https://capstonedb-onelity-6f018-default-rtdb.firebaseio.com/"
 }
